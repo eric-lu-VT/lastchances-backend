@@ -11,6 +11,7 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       password: {
         type: Sequelize.STRING,
@@ -33,6 +34,8 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+    }).then(() => {
+      return queryInterface.addIndex('users', ['email']);
     });
   },
 

@@ -19,6 +19,7 @@ module.exports = {
           key: 'id',
         },
         allowNull: false,
+        onDelete: 'cascade',
       },
       createdAt: {
         type: Sequelize.DATE,

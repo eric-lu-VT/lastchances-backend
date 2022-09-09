@@ -20,6 +20,7 @@ export enum UserScopes {
 }
 
 export interface IUser {
+  id: string;
   email: string;
   password: string; // encrypted
   name: string;
@@ -28,6 +29,12 @@ export interface IUser {
 
 @Table({
   tableName: 'users',
+  indexes: [
+    {
+      unique: true,
+      fields: ['email'],
+    },
+  ],
 })
 class User extends Model<IUser> implements IUser {
   @PrimaryKey

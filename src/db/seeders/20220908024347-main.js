@@ -29,6 +29,27 @@ module.exports = {
           name: 'Admin',
           role: 'ADMIN',
         },
+        {
+          id: '57aba4de-e449-433f-9ef9-9fdec62f8a2d',
+          email: 'A@gmail.com',
+          password: '$2b$10$bTbzneLBO3lY.9DvfXOUEeM/B0P.4RJMwHst8eTAqV90zllhKyEsm', // 12345
+          name: 'A',
+          role: 'USER',
+        },
+        {
+          id: 'f6daa916-996f-4b07-8ef4-8a2c935d9279',
+          email: 'B@gmail.com',
+          password: '$2b$10$bTbzneLBO3lY.9DvfXOUEeM/B0P.4RJMwHst8eTAqV90zllhKyEsm', // 12345
+          name: 'B',
+          role: 'USER',
+        },
+        {
+          id: '96cc3b1b-e25b-4b21-a347-3984bb37f399',
+          email: 'C@gmail.com',
+          password: '$2b$10$bTbzneLBO3lY.9DvfXOUEeM/B0P.4RJMwHst8eTAqV90zllhKyEsm', // 12345
+          name: 'C',
+          role: 'USER',
+        },
       ];
       await queryInterface.bulkInsert(
         'users',
@@ -41,37 +62,33 @@ module.exports = {
       );
   
       /**
-       * Resource Data
+       * Following Data
        */
-      const resources = [
+      const followings = [
         {
           id: '5c0e8d61-9fc0-4803-ab48-cf1b8168b764',
-          title: 'The Grapes of Wrath',
-          description: 'John Steinbeck',
-          value: 1,
+          followedEmail: 'A@gmail.com',
+          followerId: 'f6daa916-996f-4b07-8ef4-8a2c935d9279', // B 
         },
         {
           id: '05a5ab10-5ca0-426e-8091-c0800c26215b',
-          title: 'The Great Gatsby',
-          description: 'F. Scott Fitzgerald',
-          value: 5,
+          followedEmail: 'B@gmail.com',
+          followerId: '57aba4de-e449-433f-9ef9-9fdec62f8a2d', // A
         },
         {
           id: '575e8b36-9cb6-4098-9620-cd0ba1c3e585',
-          title: 'Macbeth',
-          description: 'William Shakespeare',
-          value: 10,
+          followedEmail: 'A@gmail.com',
+          followerId: '96cc3b1b-e25b-4b21-a347-3984bb37f399', // C
         },
         {
           id: '909dee79-ac3f-49ff-9182-441b06de6a86',
-          title: 'Heart of Darkness',
-          description: 'Joseph Conrad',
-          value: 15,
+          followedEmail: 'C@gmail.com',
+          followerId: '57aba4de-e449-433f-9ef9-9fdec62f8a2d', // B
         },
       ];
       await queryInterface.bulkInsert(
-        'resources',
-        resources.map((resource) => ({
+        'following',
+        followings.map((resource) => ({
           ...resource,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -90,7 +107,7 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.bulkDelete('users', null, { transaction });
-      await queryInterface.bulkDelete('resources', null, { transaction });
+      await queryInterface.bulkDelete('following', null, { transaction });
       await transaction.commit();
     } catch (e) {
       console.log(e);
