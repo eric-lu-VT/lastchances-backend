@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { ValidatedRequest } from 'express-joi-validation';
 import { CreateResourceRequest, UpdateResourceRequest } from 'validation/resource';
 import { resourceService } from 'services';
-import { IResource } from 'db/models/resource'; 
+import { IResource } from 'db/models/following'; 
 import { BaseError } from 'errors';
 
 const getAllResources: RequestHandler = async (req, res, next) => {

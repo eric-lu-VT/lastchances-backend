@@ -1,7 +1,7 @@
 
 import { resourceService } from 'services';
 import db from '../../db/db';
-import { IResource } from '../../db/models/resource';
+import { IResource } from '../../db/models/following';
 import dotenv from 'dotenv';
 
 dotenv.config();

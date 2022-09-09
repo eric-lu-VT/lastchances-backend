@@ -1,5 +1,5 @@
 import User from './user';
-import Resource from './resource';
+import Resource from './following';
 import VerificationCode from './verification_code';
 
 export {

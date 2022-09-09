@@ -8,7 +8,9 @@ import {
   AllowNull,
   Unique,
   BeforeCreate,
+  HasMany,
 } from 'sequelize-typescript';
+import Following from './following';
 import bcrypt from 'bcrypt';
 
 export enum UserScopes {
@@ -18,7 +20,6 @@ export enum UserScopes {
 }
 
 export interface IUser {
-  id: string;
   email: string;
   password: string; // encrypted
   name: string;
@@ -50,6 +51,9 @@ class User extends Model<IUser> implements IUser {
   @AllowNull(false)
   @Column(DataTypes.ENUM({ values: ['UNVERIFIED', 'USER', 'ADMIN'] }))
     role: UserScopes;
+
+  @HasMany(() => Following)
+    following: Following[];
 
   @BeforeCreate
   static encryptPassword = async (instance: IUser) => {

@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import resourceRouter from 'routers/resource_router';
 import { resourceService } from 'services';
 import db from '../../db/db';
-import { IResource } from '../../db/models/resource';
+import { IResource } from '../../db/models/following';
 
 const request = supertest(resourceRouter);
 
