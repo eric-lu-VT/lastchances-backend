@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       role: {
-        type: Sequelize.ENUM('UNVERIFIED-USER', 'USER', 'ADMIN'),
+        type: Sequelize.ENUM('UNVERIFIED', 'USER', 'ADMIN'),
         defaultValue: 'USER',
         allowNull: false,
       },
@@ -34,6 +34,8 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+    }).then(() => {
+      return queryInterface.addIndex('users', ['email']);
     });
   },
 

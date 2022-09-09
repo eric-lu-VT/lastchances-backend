@@ -2,24 +2,24 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('resources', {
+    await queryInterface.createTable('following', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      title: {
+      followedEmail: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
-      description: {
-        type: Sequelize.TEXT,
+      followerId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
         allowNull: false,
-      },
-      value: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
+        onDelete: 'cascade',
       },
       createdAt: {
         type: Sequelize.DATE,
