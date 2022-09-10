@@ -12,6 +12,7 @@ import User from './user';
 
 export interface IFollowing {
   id: string;
+  followedName: string;
   followedEmail: string; 
   followerId: string;
 }
@@ -25,6 +26,10 @@ class Following extends Model<IFollowing> implements IFollowing {
   @Default(DataTypes.UUIDV4)
   @Column({ type: DataTypes.UUID })
     id: string;
+
+  @AllowNull(false)
+  @Column(DataTypes.STRING)
+    followedName: string;
 
   @AllowNull(false)
   @Column(DataTypes.STRING)

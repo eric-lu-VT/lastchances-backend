@@ -10,18 +10,24 @@ import db from '../db/db';
 
 export interface FollowingParams {
   id?: string;
+  followedName?: string;
   followedEmail?: string;
   followerId?: string;
 }
 
 const constructQuery = (params: FollowingParams) => {
-  const { id, followedEmail, followerId } = params;
+  const { id, followedName, followedEmail, followerId } = params;
   const query: DatabaseQuery<FollowingParams> = {
     where: {},
   };
   if (id) {
     query.where.id = {
       [Op.eq]: id,
+    };
+  }
+  if (followedName) {
+    query.where.followedName = {
+      [Op.eq]: followedName,
     };
   }
   if (followedEmail) {
@@ -49,8 +55,9 @@ const getFollowings = async (params: FollowingParams) => {
 const getMatches = async (params: Pick<IUser, 'id'>) => {
   try {
     const email = await userService.getUsers({ id: params.id }).then((res) => res[0].email);
-    return await db.query(`SELECT following."id", following."followedEmail", following."followerId" FROM following INNER JOIN users on users."email"=following."followedEmail" \
-    WHERE following."followerId"='${params.id}' and EXISTS (SELECT following."followedEmail" FROM following WHERE following."followedEmail"='${email}')`);
+    return await db.query(`SELECT following."id", following."followedName", following."followedEmail", following."followerId" FROM following \
+    INNER JOIN users on users."email"=following."followedEmail" WHERE following."followerId"='${params.id}' \
+    and EXISTS (SELECT following."followedEmail" FROM following WHERE following."followedEmail"='${email}')`);
   } catch (e : any) {
     throw new BaseError(e.message, 500);
   }
