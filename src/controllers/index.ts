@@ -1,9 +1,11 @@
-import resourceController from './resource_controller';
+import followingController from './following_controller';
 import authController from './auth_controller';
 import userController from './user_controller';
+import dartController from './dart_controller';
 
 export {
-  resourceController, 
+  followingController, 
   authController,
   userController,
+  dartController,
 };
