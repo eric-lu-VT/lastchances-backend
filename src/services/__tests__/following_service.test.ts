@@ -1,4 +1,3 @@
-
 import { followingService } from 'services';
 import db from '../../db/db';
 import { IFollowing } from '../../db/models/following';
@@ -139,9 +138,8 @@ describe('followingService', () => {
   // This uses data from the seeder
   describe('getMatches', () => {
     it('Matches correctly', async () => {
-      const payload = await followingService.getMatches({ id: '57aba4de-e449-433f-9ef9-9fdec62f8a2d', email: 'A@gmail.com' });
-      console.log(payload);
-      // todo: write test case
+      const res = await followingService.getMatches({ id: '57aba4de-e449-433f-9ef9-9fdec62f8a2d' });
+      expect(res.length).toBe(2);
     });
   });
 });

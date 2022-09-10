@@ -5,6 +5,7 @@ import { Op } from 'sequelize';
 import { DatabaseQuery } from '../constants';
 import { BaseError } from 'errors';
 import { IUser } from 'db/models/user';
+import userService from './user_service';
 import db from '../db/db';
 
 export interface FollowingParams {
@@ -45,12 +46,12 @@ const getFollowings = async (params: FollowingParams) => {
   }
 };
 
-const getMatches = async (params: Pick<IUser, 'id' | 'email'>) => {
+const getMatches = async (params: Pick<IUser, 'id'>) => {
   try {
+    const email = await userService.getUsers({ id: params.id }).then((res) => res[0].email);
     return await db.query(`SELECT following."id", following."followedEmail", following."followerId" FROM following INNER JOIN users on users."email"=following."followedEmail" \
-    WHERE following."followerId"='${params.id}' and EXISTS (SELECT following."followedEmail" FROM following WHERE following."followedEmail"='${params.email}')`);
+    WHERE following."followerId"='${params.id}' and EXISTS (SELECT following."followedEmail" FROM following WHERE following."followedEmail"='${email}')`);
   } catch (e : any) {
-    console.log(e);
     throw new BaseError(e.message, 500);
   }
 };

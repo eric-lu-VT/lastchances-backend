@@ -9,6 +9,7 @@ import {
   authRouter, 
   userRouter, 
   resourceRouter,
+  dartRouter,
 } from './routers';
 import db from './db/db';
 
@@ -39,6 +40,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRouter); // NOTE: Not secured
 app.use('/users', userRouter); // NOTE: Completely secured to users
 app.use('/resources', resourceRouter); // NOTE: Partially secured to users
+app.use('/dart', dartRouter);
 app.use((req, res) => { // Custom 404 middleware
   res.status(404).json({ message: 'The route you\'ve requested doesn\'t exist' });
 });

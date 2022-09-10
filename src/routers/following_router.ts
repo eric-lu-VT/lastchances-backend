@@ -2,11 +2,12 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import { createValidator } from 'express-joi-validation';
 import requireScope from 'auth/requireScope';
+import requireSelf from 'auth/requireSelf';
 import { UserScopes } from 'db/models/user'; 
-import { resourceController } from 'controllers';
+import { followingController } from 'controllers';
 import { errorHandler } from 'errors';
 import { validationErrorHandler } from 'validation';
-import { CreateResourceSchema, UpdateResourceSchema } from 'validation/resource';
+import { CreateFollowingSchema } from 'validation/following';
 
 const router = express();
 const validator = createValidator({ passError: true });
@@ -20,28 +21,17 @@ if (process.env.NODE_ENV === 'test') {
 
 // find and return all resources
 router.route('/')
-  .get(
-    requireScope(UserScopes.Admin),
-    resourceController.getAllResources,
-  )
   .post(
     requireScope(UserScopes.User),
-    validator.body(CreateResourceSchema),
-    resourceController.createResource,
+    validator.body(CreateFollowingSchema),
+    followingController.createFollowing,
   );
 
-router.route('/:id')
+router.route('/matches/:id')
   .get(
-    resourceController.getResource,
-  )
-  .patch(
     requireScope(UserScopes.User),
-    validator.body(UpdateResourceSchema),
-    resourceController.updateResource,
-  )
-  .delete(
-    requireScope(UserScopes.User),
-    resourceController.deleteResource,
+    requireSelf(UserScopes.Admin),
+    followingController.getMatches,
   );
 
 if (process.env.NODE_ENV === 'test') {
