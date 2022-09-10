@@ -67,23 +67,27 @@ module.exports = {
       const followings = [
         {
           id: '5c0e8d61-9fc0-4803-ab48-cf1b8168b764',
+          followedName: 'A',
           followedEmail: 'A@gmail.com',
           followerId: 'f6daa916-996f-4b07-8ef4-8a2c935d9279', // B 
         },
         {
           id: '05a5ab10-5ca0-426e-8091-c0800c26215b',
+          followedName: 'B',
           followedEmail: 'B@gmail.com',
           followerId: '57aba4de-e449-433f-9ef9-9fdec62f8a2d', // A
         },
         {
           id: '575e8b36-9cb6-4098-9620-cd0ba1c3e585',
+          followedName: 'A',
           followedEmail: 'A@gmail.com',
           followerId: '96cc3b1b-e25b-4b21-a347-3984bb37f399', // C
         },
         {
           id: '909dee79-ac3f-49ff-9182-441b06de6a86',
+          followedName: 'C',
           followedEmail: 'C@gmail.com',
-          followerId: '57aba4de-e449-433f-9ef9-9fdec62f8a2d', // B
+          followerId: '57aba4de-e449-433f-9ef9-9fdec62f8a2d', // A
         },
       ];
       await queryInterface.bulkInsert(

@@ -38,10 +38,12 @@ describe('followingService', () => {
       userDataB = await userService.createUser(tp2);
       
       followingDataA = {
+        followedName: userDataB.name,
         followedEmail: userDataB.email,
         followerId: userDataA.id,
       };
       followingDataB = {
+        followedName: userDataA.name,
         followedEmail: userDataA.email,
         followerId: userDataB.id,
       };

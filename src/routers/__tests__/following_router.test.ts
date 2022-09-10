@@ -8,6 +8,7 @@ import { IFollowing } from '../../db/models/following';
 const request = supertest(followingRouter);
 
 const followingData: Omit<IFollowing, 'id'> = {
+  followedName: 'test test test',
   followedEmail: 'test@gmail.com',
   followerId: '68b0d858-9e75-49b0-902e-2b587bd9a996',
 };
@@ -98,7 +99,7 @@ describe('Working following router', () => {
         .post('/')
         .set('Authorization', 'Bearer dummy_token')
         .send(followingData);
-
+        
       expect(res.status).toBe(201);
       Object.keys(followingData).forEach((key) => {
         expect(res.body[key]).toBe(followingData[key]);
