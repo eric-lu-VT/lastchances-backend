@@ -19,12 +19,17 @@ if (process.env.NODE_ENV === 'test') {
   router.use(bodyParser.json());
 }
 
-// find and return all resources
-router.route('/')
+router.route('/:id')
   .post(
     requireScope(UserScopes.User),
+    requireSelf(UserScopes.Admin),
     validator.body(CreateFollowingSchema),
     followingController.createFollowing,
+  )
+  .get(
+    requireScope(UserScopes.User),
+    requireSelf(UserScopes.Admin),
+    followingController.getFollowings,
   );
 
 router.route('/matches/:id')

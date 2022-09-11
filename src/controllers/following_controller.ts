@@ -12,18 +12,27 @@ const createFollowing: RequestHandler = async (req: ValidatedRequest<CreateFollo
   }
 };
 
+const getFollowings: RequestHandler = async (req, res, next) =>  {
+  try {
+    const followings = await followingService.getFollowings({ followerId: req.params.id });
+    res.status(200).json(followings);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getMatches: RequestHandler = async (req, res, next) => {
   try {
-    const matches = await followingService.getMatches({ id: req.params.id as string });
+    const matches = await followingService.getMatches({ id: req.params.id });
     res.status(200).json(matches);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
 const followingController = {
   createFollowing,
+  getFollowings,
   getMatches,
 };
 
