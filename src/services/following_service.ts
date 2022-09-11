@@ -44,8 +44,8 @@ const constructQuery = (params: FollowingParams) => {
 };
 
 const getFollowings = async (params: FollowingParams) => {
-  const query = constructQuery(params);
   try {
+    const query = constructQuery(params);
     return await FollowingModel.findAll(query);
   } catch (e : any) {
     throw new BaseError(e.message, 500);

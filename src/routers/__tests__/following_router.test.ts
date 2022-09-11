@@ -38,17 +38,19 @@ describe('Working following router', () => {
     }
   });
 
-  describe('POST /', () => {
+  describe('POST /:id', () => {
     it('requires valid permissions', async () => {
       const createSpy = jest.spyOn(followingService, 'createFollowing');
 
       const res = await request
-        .post('/')
+        .post('/68b0d858-9e75-49b0-902e-2b587bd9a996')
         .send(followingData);
 
       expect(res.status).toBe(403);
       expect(createSpy).not.toHaveBeenCalled();
     });
+
+    // TODO: check not user
 
     /*
     it('blocks creation when missing field', async () => {
@@ -96,7 +98,7 @@ describe('Working following router', () => {
       const createSpy = jest.spyOn(followingService, 'createFollowing');
 
       const res = await request
-        .post('/')
+        .post('/68b0d858-9e75-49b0-902e-2b587bd9a996')
         .set('Authorization', 'Bearer dummy_token')
         .send(followingData);
         
@@ -108,6 +110,20 @@ describe('Working following router', () => {
       createSpy.mockClear();
 
       validId = String(res.body.id);
+    });
+  });
+
+  describe('GET /:id', () => {
+    it('gets when body is valid', async () => {
+      const createSpy = jest.spyOn(followingService, 'getFollowings');
+
+      const res = await request
+        .get('/68b0d858-9e75-49b0-902e-2b587bd9a996')
+        .set('Authorization', 'Bearer dummy_token');
+        
+      expect(res.status).toBe(200);
+      expect(createSpy).toHaveBeenCalled();
+      createSpy.mockClear();
     });
   });
 
