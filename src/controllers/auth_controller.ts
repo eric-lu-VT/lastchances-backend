@@ -4,7 +4,7 @@ import env from 'env-var';
 import nodemailer from 'nodemailer';
 import { RequestHandler } from 'express';
 import { ValidatedRequest } from 'express-joi-validation';
-import { userService, verificationCodeService } from 'services';
+import { userService, verificationCodeService, dartService } from 'services';
 import { IUser } from 'db/models/user';
 import { RequestWithJWT } from 'auth/requests';
 import { ResendCodeRequest, SignUpUserRequest, VerifyUserRequest } from 'validation/auth';
@@ -43,14 +43,17 @@ const tokenForUser = (user: IUser): string => {
 const signUpUser: RequestHandler = async (req: ValidatedRequest<SignUpUserRequest>, res, next) => {
   try {
     const {
-      email, password, name,
+      email, password,
     } = req.body;
+    
+    const dartJWT = await dartService.getDartJWT(); 
+    const user = await dartService.getDartUserFromEmail({ email, jwt: dartJWT });
 
     // Make a new user from passed data
     const savedUser = await userService.createUser({
       email,
       password,
-      name,
+      name: user.name,
     });
 
     const codePayload = await verificationCodeService.createVerificationCode({ email });

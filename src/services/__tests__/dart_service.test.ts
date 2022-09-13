@@ -39,5 +39,22 @@ describe('dartService', () => {
       expect(user.campus_address).toBe(dartDataA.campus_address);
     });
   });
+
+  describe('getDartUserFromEmail', () => {
+    it('Can get exact email', async () => {
+      const user = await dartService.getDartUserFromEmail({ email: 'eric.j.lu.25@dartmouth.edu', jwt });
+      expect(user.netid).toBe(dartDataA.netid);
+      expect(user.name).toBe(dartDataA.name);
+      expect(user.first_name).toBe(dartDataA.first_name);
+      expect(user.last_name).toBe(dartDataA.last_name);
+      expect(user.middle_name).toBe(dartDataA.middle_name);
+      expect(user.email).toBe(dartDataA.email);
+      expect(user.campus_address).toBe(dartDataA.campus_address);
+    });
+
+    it('Rejects bad email', async () => {
+      expect(dartService.getDartUserFromEmail({ email: 'notemail@gmail.com', jwt })).rejects.toBeDefined();
+    });
+  });
 });
 

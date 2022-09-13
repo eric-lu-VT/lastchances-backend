@@ -6,7 +6,6 @@ import { IVerificationCode } from 'db/models/verification_code';
 export const SignUpUserSchema = joi.object<IUser>({
   email: joi.string().email().required().error(() => 'Signup user expecting an email'),
   password: joi.string().required().error(() => 'Signup expecting a password'),
-  name: joi.string().required().error(() => 'Signup expecting a name'),
 });
 
 export const ResendCodeSchema = joi.object<Pick<IUser, 'id' | 'email'>>({

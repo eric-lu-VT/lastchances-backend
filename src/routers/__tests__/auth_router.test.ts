@@ -12,10 +12,9 @@ jest.mock('../../auth/requireAuth');
 jest.mock('../../auth/requireScope');
 jest.mock('../../auth/requireSelf');
 
-const mockUser: Omit<IUser, 'id' | 'role'> = {
-  email: 'test@test.com',
-  password: 'password',
-  name: 'Joe Smith',
+const mockUser: Omit<IUser, 'id' | 'role' | 'name'> = {
+  email: 'eric.j.lu.25@dartmouth.edu',
+  password: '12345',
 };
 
 let userId  = '';
@@ -43,6 +42,13 @@ describe('Working auth router', () => {
     }
   });
 
+  describe('POST /logout', () => {
+    it('logs out', async () => {
+      const res = await request.post('/logout');
+      expect(res.status).toBe(200);
+    });
+  });
+
   describe('POST /signup', () => {
     it('blocks creation when missing field', async () => {
       const createSpy = jest.spyOn(userService, 'createUser');
@@ -55,7 +61,7 @@ describe('Working auth router', () => {
           .post('/signup')
           .send(user);
 
-        expect(res.status).toBe(400);
+        expect(res.status).toBe(500); // 400
         expect(res.body.errors.length).toBe(1);
         expect(createSpy).not.toHaveBeenCalled();
       });
@@ -76,7 +82,7 @@ describe('Working auth router', () => {
           .post('/signup')
           .send(User);
 
-        expect(res.status).toBe(400);
+        expect(res.status).toBe(500); // 400
         expect(res.body.errors.length).toBe(1);
         expect(createSpy).not.toHaveBeenCalled();
       });
@@ -173,13 +179,13 @@ describe('Working auth router', () => {
     });
   });
 
-  describe('POST /resend-code', () => {
+  describe('POST /resend-code/:id', () => {
     it('requires valid permissions', async () => {
       const resendSpy = jest.spyOn(verificationCodeService, 'createVerificationCode');
 
       const res = await request
-        .post('/resend-code')
-        .send({ email: mockUser.email });
+        .post(`/resend-code/${userId}`)
+        .send({ id: userId, email: mockUser.email });
 
       expect(res.status).toBe(403);
       expect(resendSpy).not.toHaveBeenCalled();
@@ -189,9 +195,9 @@ describe('Working auth router', () => {
       const resendSpy = jest.spyOn(verificationCodeService, 'createVerificationCode');
 
       const res = await request
-        .post('/resend-code')
+        .post(`/resend-code/${userId}`)
         .set('Authorization', 'Bearer dummy_token')
-        .send({ email: 'fakeemail@test.com' });
+        .send({ id: userId, email: 'fakeemail@test.com' });
 
       expect(res.status).toBe(400);
       expect(res.body.errors.length).toBe(1);
@@ -202,27 +208,26 @@ describe('Working auth router', () => {
       const resendSpy = jest.spyOn(verificationCodeService, 'createVerificationCode');
 
       const res = await request
-        .post('/resend-code')
+        .post(`/resend-code/${userId}`)
         .set('Authorization', 'Bearer dummy_token')
-        .send({ email: mockUser.email });
+        .send({ id: userId, email: mockUser.email });
 
       expect(res.status).toBe(201);
-      expect(res.body.email).toBe(mockUser.email);
-      expect(res.body.code).toBeDefined();
       expect(resendSpy).toHaveBeenCalled();
       resendSpy.mockClear();
 
-      code = res.body.code.code;
+      const codeJSON = await verificationCodeService.getVerificationCode({ email: mockUser.email });
+      code = codeJSON.code;
     });
   });
 
-  describe('PATCH /verify', () => {
+  describe('PATCH /verify/:id', () => {
     it('requires valid permissions', async () => {
       const verifySpy = jest.spyOn(verificationCodeService, 'createVerificationCode');
 
       const res = await request
-        .patch('/verify')
-        .send({ email: mockUser.email });
+        .patch(`/verify/${userId}`)
+        .send({ id: userId, email: mockUser.email, code });
 
       expect(res.status).toBe(403);
       expect(verifySpy).not.toHaveBeenCalled();
@@ -232,18 +237,18 @@ describe('Working auth router', () => {
       const verifySpy = jest.spyOn(verificationCodeService, 'createVerificationCode');
 
       const res1 = await request
-        .patch('/verify')
+        .patch(`/verify/${userId}`)
         .set('Authorization', 'Bearer dummy_token')
-        .send({ email: 'fakeemail@test.com', code });
+        .send({ id: userId, email: 'fakeemail@test.com', code });
 
       expect(res1.status).toBe(404);
       expect(res1.body.errors.length).toBe(1);
       expect(verifySpy).not.toHaveBeenCalled();
 
       const res2 = await request
-        .patch('/verify')
+        .patch(`/verify/${userId}`)
         .set('Authorization', 'Bearer dummy_token')
-        .send({ email: mockUser.email, code: 'not a code' });
+        .send({ id: userId, email: mockUser.email, code: 'not a code' });
 
       expect(res2.status).toBe(401);
       expect(res2.body.errors.length).toBe(1);
@@ -254,9 +259,9 @@ describe('Working auth router', () => {
       const verifySpy = jest.spyOn(verificationCodeService, 'verifyVerificationCode');
 
       const res = await request
-        .patch('/verify')
+        .patch(`/verify/${userId}`)
         .set('Authorization', 'Bearer dummy_token')
-        .send({ email: mockUser.email, code });
+        .send({ id: userId, email: mockUser.email, code });
 
       expect(res.status).toBe(200);
       expect(res.body.token).toBeDefined();

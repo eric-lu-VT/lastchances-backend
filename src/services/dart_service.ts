@@ -24,6 +24,11 @@ export interface DartParams {
   jwt: string,
 }
 
+export interface DartEmailParams {
+  email: string,
+  jwt: string,
+}
+
 const getDartJWT = async () => {
   try {
     const URL = 'https://api.dartmouth.edu/api/jwt?';
@@ -50,9 +55,34 @@ const getDartUsers = async (params: DartParams) => {
       },
     };
 
-    const res = await axios.get<DartQuery>(URL, HEADERS);
+    const res = await axios.get<DartQuery[]>(URL, HEADERS);
     return res.data;
   } catch (e: any) {
+    throw new BaseError(e.message, 500);
+  }
+};
+
+const getDartUserFromEmail = async (params: DartEmailParams) => {
+  try {
+    const URL = `https://api.dartmouth.edu/api/people?email=${params.email}*`;
+    const HEADERS = {
+      headers: {
+        Authorization: `Bearer ${params.jwt}`,
+      },
+    };
+
+    const res = await axios.get<DartQuery[]>(URL, HEADERS);
+    if (res.data.length === 0) {
+      throw new BaseError('Invalid email: must be (non netid) Dartmouth email', 412);
+    } else if (res.data.length > 1) {
+      throw new BaseError('More than one user contains specified Dartmouth email', 409);
+    }
+
+    return res.data[0];
+  } catch (e: any) {
+    if (e.code) {
+      throw e;
+    }
     throw new BaseError(e.message, 500);
   }
 };
@@ -60,6 +90,7 @@ const getDartUsers = async (params: DartParams) => {
 const dartService = {
   getDartJWT,
   getDartUsers,
+  getDartUserFromEmail,
 };
 
 export default dartService;
