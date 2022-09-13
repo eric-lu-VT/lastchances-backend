@@ -44,7 +44,6 @@ describe('verificationCodeService', () => {
         where: { id: { [Op.eq]: user.id } },
       });
     } catch (error) {
-      console.log(error);
       throw new Error('Error while cleaning verifiation code service tests...');
     }
   });

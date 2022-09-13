@@ -2,9 +2,9 @@ import { RequestHandler } from 'express';
 import { IUser } from '../../db/models/user';
 
 const mockUser: Omit<IUser, 'id' | 'role'> = {
-  email: 'test@test.com',
-  password: 'password',
-  name: 'Joe Smith',
+  email: 'eric.j.lu.25@dartmouth.edu',
+  password: '12345',
+  name: 'Grace Lu',
 };
 
 const requireAuth: RequestHandler = (req, res, next) => {
