@@ -10,11 +10,11 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint ./src",
-    "test": "yarn lint && NODE_ENV=test jest --runInBand --coverage",
+    "test": "npm run lint && NODE_ENV=test jest --runInBand --coverage",
     "dev": "nodemon -r tsconfig-paths/register src/server.ts --exec ts-node",
     "start": "ts-node -r tsconfig-paths/register src/server.ts",
     "build": "tsc",
-    "prod": "yarn build; node dist/server.js"
+    "prod": "npm run build && node lib/server.js"
   },
   "dependencies": {
     "axios": "^0.25.0",
