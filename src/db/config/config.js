@@ -26,10 +26,12 @@ module.exports = {
     dialect: 'postgres',
     logging: true,
     dialectOptions: {
+      /*
       ssl: {
         require: true,
         rejectUnauthorized: false,
       },
+      */
     },
   },
 };
