@@ -13,7 +13,7 @@
     "test": "npm run lint && NODE_ENV=test jest --runInBand --coverage",
     "dev": "nodemon -r tsconfig-paths/register src/server.ts --exec ts-node",
     "start": "ts-node -r tsconfig-paths/register src/server.ts",
-    "build": "npm install && tsc && npx sequelize db:migrate",
+    "build": "npm install && tsc",
     "prod": "npm run build && node lib/server.js"
   },
   "dependencies": {
@@ -62,6 +62,7 @@
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.1",
     "jest-environment-node": "^27.5.1",
+    "mongodb-memory-server": "^8.3.0",
     "nodemon": "^2.0.19",
     "supertest": "^6.2.2",
     "ts-jest": "^27.1.3",
