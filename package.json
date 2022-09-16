@@ -17,6 +17,7 @@
     "prod": "npm run build && node lib/server.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
@@ -30,7 +31,6 @@
     "joi": "^17.6.0",
     "jwt-simple": "^0.5.6",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.7.8",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
