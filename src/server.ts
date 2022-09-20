@@ -6,12 +6,13 @@ import dotenv from 'dotenv';
 import { errorHandler } from 'errors';
 import { validationErrorHandler } from 'validation';
 import {
-  authRouter, 
-  userRouter, 
+  authRouter,
+  userRouter,
   followingRouter,
   dartRouter,
 } from './routers';
 import db from './db/db';
+import axios from 'axios';
 
 dotenv.config();
 
@@ -46,5 +47,17 @@ app.use((req, res) => { // Custom 404 middleware
 });
 app.use(validationErrorHandler);
 app.use(errorHandler);
+
+const ping = async () => {
+  return axios
+    .get<string>(`${process.env.SERVER_URL}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+setInterval(ping, 20 * 60 * 1000); // 20 mins interval - prevent idling
 
 export default server;
