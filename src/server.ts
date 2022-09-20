@@ -58,6 +58,6 @@ const ping = async () => {
       throw err;
     });
 };
-setInterval(ping, 20 * 60 * 1000); // 20 mins interval - prevent idling
+setInterval(ping, 60 * 1000); // 20 mins interval - prevent idling
 
 export default server;
