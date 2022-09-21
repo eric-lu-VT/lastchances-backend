@@ -1,6 +1,6 @@
-# CRUD Template - Backend - PostgreSQL
+# Last Chances - Backend
 
-This repository is the default backend starter pack for new DALI React projects. Installation and setup instructions are included below. You should eventually customize this README file with project-specific documentation.
+Hosts the backend for the [Last Chances 22F](https://github.com/eric-lu-VT/lastchances-frontend) project.
 
 ## Tech Stack
   - [Express](https://expressjs.com/)
@@ -46,19 +46,17 @@ This repository is the default backend starter pack for new DALI React projects.
     - Ensure [Homebrew](https://brew.sh/) is installed
     - Run `brew install postgresql` if PostgreSQL isn't installed
     - If you'd like to use a GUI to interact with PostgreSQL, download one. We recommend [Postico](https://eggerapps.at/postico/)
-3. Create a PostgreSQL DB called `backend_template` if setting up locally, using your GUI of choice (Postico or pgAdmin).
-4. Set up Google Developer API (for email sending)
-   - You will need to enable [2 Step Auth](https://support.google.com/accounts/answer/185839) on your desired Google account and generate an [App Specific Password](https://myaccount.google.com/security). See this [StackExchange thread](https://stackoverflow.com/questions/19877246/nodemailer-with-gmail-and-nodejs?answertab=modifieddesc#tab-top) for more details.
-   - Alternatively just comment out all the nodemailer stuff if you don't want to use/need to set up the email service.
-   - Note that you'll have to do a lot more email/domain configuration before the email service will adequately work in production. (Instructions for this TBD)
+3. Create a PostgreSQL DB called `lastchances` if setting up locally, using your GUI of choice (Postico or pgAdmin).
+4. [Set up SendGrid API](https://docs.sendgrid.com/for-developers/sending-email/api-getting-started) (for email sending)
 5. Create a `.env` file in the root directory
   - Should be in the following format:
   - ```
     AUTH_SECRET=*secret assortment of characters used for encryption*
-    PORT=*insert desired backend server port here*
+    PORT=4000
     DATABASE_URL=postgres://username:password@localhost:5432/backend_template
-    GOOGLE_CLIENT_EMAIL=*Google Developer API email*
-    GOOGLE_CLIENT_PASS=*Google Developer API password*
+    SENDGRID_EMAIL=*Sendgrid API email*
+    SENDGRID_API_KEY=*Sendgrid API password*
+    SERVER_URL=http://localhost:4000/
     ```
 6. Run `npx sequelize db:migrate` to apply migrations to DB.
 7. Run `npx sequelize db:seed:all` to load initial data.
@@ -78,8 +76,3 @@ ESLint is set up in this project. To keep code clean, always remember to run `np
 
 Jest unit testing is set up for the controllers, routers, and services. Remember to run `npm test` and fix any breaking changes that might've occured. 
   - You can also run just an individual test file with `npm test -- *filename*`
-
-## Authors & Credits
-- Eric Lu '25
-
-Additional credit goes to Adam McQuilkin '22, Ziray Hao '22, Jack Keane '22, Thomas Monfre '21 for developing the original DALI [CRUD Template Backend](https://github.com/dali-lab/crud-template-backend), which this starter pack was evolved from.
