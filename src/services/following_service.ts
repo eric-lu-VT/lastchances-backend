@@ -6,7 +6,6 @@ import { DatabaseQuery } from '../constants';
 import { BaseError } from 'errors';
 import { IUser } from 'db/models/user';
 import userService from './user_service';
-import db from '../db/db';
 
 export interface FollowingParams {
   id?: string;
@@ -58,21 +57,19 @@ const getFollowings = async (params: FollowingParams) => {
   }
 };
 
-interface MatchesOutParams {
-  rows: IFollowing[];
-}
-
-// TODO: Fix
 const getMatches = async (params: Pick<IUser, 'id'>) => {
   try {
     const netid = await userService.getUsers({ id: params.id }).then((res) => res[0].netid);
-    const queryResult = await db.query(`SELECT following."id", following."followedName", following."followedEmail", following."followerId" FROM following \
-      INNER JOIN users on lower(users."email")=lower(following."followedEmail") WHERE following."followerId"='${params.id}' \
-      and EXISTS (SELECT following."followedEmail" FROM following WHERE lower(following."followedEmail")=lower('${netid}}'))`);
+    const followings: IFollowing[] = await getFollowings({ followerNetId: netid });
+    const matches: IFollowing[] = [];
+    for (const following of followings) {
+      const tempFollowing: IFollowing[] = await getFollowings({ followedNetId: netid, followerNetId: following.followedNetId });
+      if (tempFollowing.length > 0) {
+        matches.push(tempFollowing[0]);
+      }
+    }
     
-    const res : MatchesOutParams = queryResult[1] as MatchesOutParams;
-    console.log(res.rows);
-    return res.rows;
+    return matches;
   } catch (e : any) {
     throw new BaseError(e.message, 500);
   }
@@ -99,7 +96,7 @@ const createFollowing = async (params: Omit<IFollowing, 'id'>) => {
       id: uuidv4(),
     });
   } catch (e : any) {
-    throw e;
+    throw new BaseError(e.message, 500);
   }
 };
 

@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { IUser } from '../../db/models/user';
 
 const mockUser: Omit<IUser, 'id' | 'role'> = {
-  netid: 'F0056mr',
+  netid: 'f0056mr',
   email: 'eric.j.lu.25@dartmouth.edu',
   name: 'Eric Lu',
 };

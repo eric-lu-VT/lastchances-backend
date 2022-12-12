@@ -1,6 +1,6 @@
 # Last Chances - Backend
 
-Hosts the backend for the [Last Chances 22F](https://github.com/eric-lu-VT/lastchances-frontend) project.
+Hosts the backend for the [Last Chances 22W](https://github.com/eric-lu-VT/lastchances-frontend) project.
 
 ## Tech Stack
   - [Express](https://expressjs.com/)
@@ -47,20 +47,19 @@ Hosts the backend for the [Last Chances 22F](https://github.com/eric-lu-VT/lastc
     - Run `brew install postgresql` if PostgreSQL isn't installed
     - If you'd like to use a GUI to interact with PostgreSQL, download one. We recommend [Postico](https://eggerapps.at/postico/)
 3. Create a PostgreSQL DB called `lastchances` if setting up locally, using your GUI of choice (Postico or pgAdmin).
-4. [Set up SendGrid API](https://docs.sendgrid.com/for-developers/sending-email/api-getting-started) (for email sending)
-5. Create a `.env` file in the root directory
+4. Create a `.env` file in the root directory
   - Should be in the following format:
   - ```
     AUTH_SECRET=*secret assortment of characters used for encryption*
     PORT=4000
     DATABASE_URL=postgres://username:password@localhost:5432/backend_template
-    SENDGRID_EMAIL=*Sendgrid API email*
-    SENDGRID_API_KEY=*Sendgrid API password*
+    DARTAPI=
     SERVER_URL=http://localhost:4000/
+    FRONTEND_URL=http://localhost:3000
     ```
-6. Run `npx sequelize db:migrate` to apply migrations to DB.
-7. Run `npx sequelize db:seed:all` to load initial data.
-8. App should be ready for use now
+5. Run `npx sequelize db:migrate` to apply migrations to DB.
+6. Run `npx sequelize db:seed:all` to load initial data.
+7. App should be ready for use now
   - `npm start` to run in production mode
   - `npm run dev` to run with hot reloading
 

@@ -16,7 +16,7 @@ const dartData = {
   first_name: 'Eric',
   last_name: 'Lu',
   middle_name: 'Jiazhi',
-  email: 'Eric.J.Lu.25@Dartmouth.edu',
+  email: 'Eric.J.Lu.25@dartmouth.edu',
   prefix: null,
   suffix: null,
   campus_address: 'Hinman Box 2822',

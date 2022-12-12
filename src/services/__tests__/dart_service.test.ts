@@ -9,7 +9,7 @@ const dartDataA = {
   first_name: 'Eric',
   last_name: 'Lu',
   middle_name: 'Jiazhi',
-  email: 'Eric.J.Lu.25@Dartmouth.edu',
+  email: 'Eric.J.Lu.25@dartmouth.edu',
   prefix: null,
   suffix: null,
   campus_address: 'Hinman Box 2822',
@@ -40,9 +40,9 @@ describe('dartService', () => {
     });
   });
 
-  describe('getDartUserFromEmail', () => {
+  describe('getDartUserFromNetId', () => {
     it('Can get exact email', async () => {
-      const user = await dartService.getDartUserFromEmail({ email: 'eric.j.lu.25@dartmouth.edu', jwt });
+      const user = await dartService.getDartUserFromNetId({ netid: 'f0056mr', jwt });
       expect(user.netid).toBe(dartDataA.netid);
       expect(user.name).toBe(dartDataA.name);
       expect(user.first_name).toBe(dartDataA.first_name);
@@ -53,7 +53,7 @@ describe('dartService', () => {
     });
 
     it('Rejects bad email', async () => {
-      expect(dartService.getDartUserFromEmail({ email: 'notemail@gmail.com', jwt })).rejects.toBeDefined();
+      expect(dartService.getDartUserFromNetId({ netid: 'abcde', jwt })).rejects.toBeDefined();
     });
   });
 });

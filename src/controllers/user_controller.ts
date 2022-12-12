@@ -36,10 +36,10 @@ const getUser: RequestHandler = async (req, res, next) => {
 const updateUser: RequestHandler = async (req: ValidatedRequest<UpdateUserRequest>, res, next) => {
   try {
     // ! Only allow user to update certain fields (avoids privilege elevation)
-    const { email, name } = req.body;
+    const { netid, email, name } = req.body;
 
     const updatedUsers = await userService.editUsers(
-      { email, name },
+      { netid, email, name },
       { id: req.params.id },
     );
 
