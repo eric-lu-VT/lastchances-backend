@@ -10,12 +10,12 @@ import { BaseError } from 'errors';
 const createNewUser: RequestHandler = async (req: ValidatedRequest<CreateUserRequest>, res, next) => {
   try {
     const {
-      email, 
-      password, 
+      netid,
+      email,
       name,
     } = req.body;
 
-    const newUser = await userService.createUser({ email, password, name });
+    const newUser = await userService.createUser({ netid, email, name });
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -36,10 +36,10 @@ const getUser: RequestHandler = async (req, res, next) => {
 const updateUser: RequestHandler = async (req: ValidatedRequest<UpdateUserRequest>, res, next) => {
   try {
     // ! Only allow user to update certain fields (avoids privilege elevation)
-    const { email, password, name } = req.body;
+    const { email, name } = req.body;
 
     const updatedUsers = await userService.editUsers(
-      { email, password, name },
+      { email, name },
       { id: req.params.id },
     );
 

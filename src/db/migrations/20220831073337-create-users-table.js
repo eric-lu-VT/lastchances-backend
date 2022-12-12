@@ -8,21 +8,22 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      email: {
+      netid: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
       },
-      password: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       role: {
-        type: Sequelize.ENUM('UNVERIFIED', 'USER', 'ADMIN'),
+        type: Sequelize.ENUM('USER', 'ADMIN'),
         defaultValue: 'USER',
         allowNull: false,
       },
@@ -35,7 +36,7 @@ module.exports = {
         allowNull: false,
       },
     }).then(() => {
-      return queryInterface.addIndex('users', ['email']);
+      return queryInterface.addIndex('users', ['netid', 'email']);
     });
   },
 

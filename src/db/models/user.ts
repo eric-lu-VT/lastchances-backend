@@ -7,22 +7,19 @@ import {
   Default,
   AllowNull,
   Unique,
-  BeforeCreate,
   HasMany,
 } from 'sequelize-typescript';
 import Following from './following';
-import bcrypt from 'bcrypt';
 
 export enum UserScopes {
-  Unverified = 'UNVERIFIED',
   User = 'USER',
   Admin = 'ADMIN',
 }
 
 export interface IUser {
   id: string;
+  netid: string;
   email: string;
-  password: string; // encrypted
   name: string;
   role: UserScopes;
 }
@@ -33,6 +30,10 @@ export interface IUser {
     {
       unique: true,
       fields: ['email'],
+    },
+    {
+      unique: true,
+      fields: ['netid'],
     },
   ],
 })
@@ -45,11 +46,12 @@ class User extends Model<IUser> implements IUser {
   @Unique
   @AllowNull(false)
   @Column(DataTypes.STRING)
-    email: string;
+    netid: string;
 
+  @Unique
   @AllowNull(false)
   @Column(DataTypes.STRING)
-    password: string;
+    email: string;
 
   @AllowNull(false)
   @Column(DataTypes.STRING)
@@ -61,11 +63,6 @@ class User extends Model<IUser> implements IUser {
 
   @HasMany(() => Following)
     following: Following[];
-
-  @BeforeCreate
-  static encryptPassword = async (instance: IUser) => {
-      instance.password = await bcrypt.hash(instance.password, 10);
-    };
 }
 
 export default User;

@@ -1,4 +1,4 @@
 import requireAuth from './requireAuth';
-import requireSignin from './requireSignin';
+import requireCas from './requireCas';
 
-export { requireAuth, requireSignin };
+export { requireAuth, requireCas };

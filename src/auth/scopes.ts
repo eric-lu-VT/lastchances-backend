@@ -7,7 +7,7 @@ interface IScope {
 
 const AdminScope: IScope = {
   name: UserScopes.Admin,
-  subscopes: new Set<UserScopes>([UserScopes.User, UserScopes.Unverified]),
+  subscopes: new Set<UserScopes>([UserScopes.User]),
 };
 
 const UserScope: IScope = {
@@ -15,15 +15,9 @@ const UserScope: IScope = {
   subscopes: new Set([]),
 };
 
-const UnverifiedScope: IScope = {
-  name: UserScopes.Unverified,
-  subscopes: new Set([]),
-};
-
 export const SCOPES: Record<UserScopes, IScope> = {
   ADMIN: AdminScope,
   USER: UserScope,
-  UNVERIFIED: UnverifiedScope,
 };
 
 /**
