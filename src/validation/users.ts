@@ -3,9 +3,9 @@ import { ValidatedRequestSchema, ContainerTypes } from 'express-joi-validation';
 import { IUser } from '../db/models/user';
 
 export const CreateUserSchema = joi.object<IUser>({
-  email: joi.string().email().required().error(() => 'Create user expecting an id'),
-  password: joi.string().required().error(() => 'Create user expecting a password'),
-  name: joi.string().required().error(() => 'Create user expecting a name'),
+  netid: joi.string().required().error(() => new Error('Create user expecting a name')),
+  email: joi.string().email().required().error(() => new Error('Create user expecting an id')),
+  name: joi.string().required().error(() => new Error('Create user expecting a name')),
 });
 
 export interface CreateUserRequest extends ValidatedRequestSchema {
@@ -14,8 +14,8 @@ export interface CreateUserRequest extends ValidatedRequestSchema {
 
 export const UpdateUserSchema = joi.object<IUser>({
   id: joi.string(),
+  netid: joi.string(),
   email: joi.string().email(),
-  password: joi.string(),
   name: joi.string(),
   role: joi.string(),
 });

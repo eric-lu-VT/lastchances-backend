@@ -13,10 +13,11 @@ import User from './user';
 export interface IFollowing {
   id: string;
   followedName: string;
-  followedEmail: string; 
-  followerId: string;
+  followedNetId: string; 
+  followerNetId: string;
+  followerUserId: string;
 }
-// [followerId] is crushing on [followedEmail]
+// [followerNetId] is crushing on [followedNetId]
 
 @Table({
   tableName: 'following',
@@ -33,12 +34,16 @@ class Following extends Model<IFollowing> implements IFollowing {
 
   @AllowNull(false)
   @Column(DataTypes.STRING)
-    followedEmail: string;
+    followedNetId: string;
+
+  @AllowNull(false)
+  @Column(DataTypes.STRING)
+    followerNetId: string;
 
   @ForeignKey(() => User)
   @AllowNull(false)
   @Column(DataTypes.UUID)
-    followerId: string;
+    followerUserId: string;
 }
 
 export default Following;

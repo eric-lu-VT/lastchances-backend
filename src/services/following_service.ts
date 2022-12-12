@@ -11,12 +11,13 @@ import db from '../db/db';
 export interface FollowingParams {
   id?: string;
   followedName?: string;
-  followedEmail?: string;
-  followerId?: string;
+  followedNetId?: string;
+  followerNetId?: string;
+  followerUserId?: string;
 }
 
 const constructQuery = (params: FollowingParams) => {
-  const { id, followedName, followedEmail, followerId } = params;
+  const { id, followedName, followedNetId, followerNetId, followerUserId } = params;
   const query: DatabaseQuery<FollowingParams> = {
     where: {},
   };
@@ -30,14 +31,19 @@ const constructQuery = (params: FollowingParams) => {
       [Op.eq]: followedName,
     };
   }
-  if (followedEmail) {
-    query.where.followedEmail = {
-      [Op.eq]: followedEmail,
+  if (followedNetId) {
+    query.where.followedNetId = {
+      [Op.eq]: followedNetId,
     };
   }
-  if (followerId) {
-    query.where.followerId = {
-      [Op.eq]: followerId,
+  if (followerNetId) {
+    query.where.followerNetId = {
+      [Op.eq]: followerNetId,
+    };
+  }
+  if (followerUserId) {
+    query.where.followerUserId = {
+      [Op.eq]: followerUserId,
     };
   }
   return query;
@@ -56,13 +62,13 @@ interface MatchesOutParams {
   rows: IFollowing[];
 }
 
+// TODO: Fix
 const getMatches = async (params: Pick<IUser, 'id'>) => {
   try {
-    const email = await userService.getUsers({ id: params.id }).then((res) => res[0].email);
-    console.log(params.id, email);
+    const netid = await userService.getUsers({ id: params.id }).then((res) => res[0].netid);
     const queryResult = await db.query(`SELECT following."id", following."followedName", following."followedEmail", following."followerId" FROM following \
       INNER JOIN users on lower(users."email")=lower(following."followedEmail") WHERE following."followerId"='${params.id}' \
-      and EXISTS (SELECT following."followedEmail" FROM following WHERE lower(following."followedEmail")=lower('${email}'))`);
+      and EXISTS (SELECT following."followedEmail" FROM following WHERE lower(following."followedEmail")=lower('${netid}}'))`);
     
     const res : MatchesOutParams = queryResult[1] as MatchesOutParams;
     console.log(res.rows);

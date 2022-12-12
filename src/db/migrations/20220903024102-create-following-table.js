@@ -12,11 +12,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      followedEmail: {
+      followedNetId: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      followerId: {
+      followerNetId: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      followerUserId: {
         type: Sequelize.UUID,
         references: {
           model: 'users',
@@ -37,6 +41,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('resources');
+    await queryInterface.dropTable('following');
   },
 };

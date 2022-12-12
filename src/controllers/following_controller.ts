@@ -7,7 +7,7 @@ import { BaseError } from 'errors';
 
 const createFollowing: RequestHandler = async (req: ValidatedRequest<CreateFollowingRequest>, res, next) => {
   try {
-    const followings: IFollowing[] = await followingService.getFollowings({ followerId: req.params.id });
+    const followings: IFollowing[] = await followingService.getFollowings({ followerNetId: req.body.followerNetId });
     if (followings.length >= 10) {
       throw new BaseError('You cannot create more than 10 crushes', 409);
     }
@@ -21,7 +21,7 @@ const createFollowing: RequestHandler = async (req: ValidatedRequest<CreateFollo
 
 const getFollowings: RequestHandler = async (req, res, next) =>  {
   try {
-    const followings: IFollowing[] = await followingService.getFollowings({ followerId: req.params.id });
+    const followings: IFollowing[] = await followingService.getFollowings({ followerUserId: req.params.id });
     res.status(200).json(followings);
   } catch (error) {
     next(error);

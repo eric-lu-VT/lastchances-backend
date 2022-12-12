@@ -2,14 +2,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import UserModel, { IUser, UserScopes } from 'db/models/user';
 import { Op } from 'sequelize';
-import bcrypt from 'bcrypt';
 import { DatabaseQuery } from '../constants';
 import { BaseError } from 'errors';
 
 export interface UserParams {
   id?: string;
+  netid?: string;
   email?: string;
-  password?: string;
   name?: string;
   role?: string;
 
@@ -18,7 +17,7 @@ export interface UserParams {
 }
 
 const constructQuery = (params: UserParams) => {
-  const { id, email, password, name, role, limit = 30, offset = 0 } = params;
+  const { id, netid, email, name, role, limit = 30, offset = 0 } = params;
   const query: DatabaseQuery<UserParams> & {
     attributes: { exclude: string[] };
   } = {
@@ -30,14 +29,14 @@ const constructQuery = (params: UserParams) => {
       [Op.eq]: id,
     };
   }
+  if (netid) {
+    query.where.netid = {
+      [Op.eq]: netid,
+    };
+  }
   if (email) {
     query.where.email = {
       [Op.eq]: email,
-    };
-  }
-  if (password) {
-    query.where.password = {
-      [Op.eq]: password,
     };
   }
   if (name) {
@@ -69,9 +68,6 @@ const getUsers = async (params: Omit<UserParams, 'password'>) => {
 };
 
 const editUsers = async (user: Partial<IUser>, params: UserParams) => {
-  if (params.password) {
-    params.password = await bcrypt.hash(params.password, 10);
-  }
   const query = constructQuery(params);
   return (await UserModel.update(user, { ...query, returning: true }))[1];
 };
@@ -85,25 +81,7 @@ const deleteUsers = async (params: UserParams) => {
   }
 };
 
-const isValidPassword = async (email: string, password: string) => {
-  const users = await getUsers({ email });
-  // get password; getUsers omits it
-  const hash = (
-    await UserModel.findAll({ where: { email: { [Op.eq]: email } } })
-  )[0].password;
-
-  if (users.length == 0 || hash == null) {
-    throw new BaseError('No user exists with this email.', 404);
-  }
-
-  try {
-    return await bcrypt.compare(password, hash);
-  } catch (e : any) {
-    throw new BaseError('Incorrect password', 401);
-  }
-};
-
-const createUser = async (user: Pick<IUser, 'email' | 'password' | 'name'>) => {
+const createUser = async (user: Pick<IUser, 'netid' | 'email' | 'name'>) => {
   // check for inactive account with this email
   // db-level unique constraint on email; can assume only one user if any
   const usersSameEmail = await getUsers({
@@ -111,12 +89,11 @@ const createUser = async (user: Pick<IUser, 'email' | 'password' | 'name'>) => {
   });
 
   if (usersSameEmail.length == 0) {
-    // TODO: change verified back to false once email verification is fixed
     try {
       return await UserModel.create({ 
         ...user, 
         id: uuidv4(),
-        role: UserScopes.Unverified,
+        role: UserScopes.User,
       });
     } catch (e : any) {
       throw new BaseError(e.message, 500);
@@ -131,7 +108,6 @@ const userService = {
   getUsers,
   editUsers,
   deleteUsers,
-  isValidPassword,
 };
 
 export default userService;
