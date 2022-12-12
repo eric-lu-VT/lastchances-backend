@@ -9,8 +9,9 @@ const request = supertest(followingRouter);
 
 const followingData: Omit<IFollowing, 'id'> = {
   followedName: 'test test test',
-  followedEmail: 'test@gmail.com',
-  followerId: '68b0d858-9e75-49b0-902e-2b587bd9a996',
+  followedNetId: 'T0000T',
+  followerNetId: 'F0000VV',
+  followerUserId: '68b0d858-9e75-49b0-902e-2b587bd9a996',
 };
 
 let validId = '';

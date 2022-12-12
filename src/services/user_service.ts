@@ -82,24 +82,14 @@ const deleteUsers = async (params: UserParams) => {
 };
 
 const createUser = async (user: Pick<IUser, 'netid' | 'email' | 'name'>) => {
-  // check for inactive account with this email
-  // db-level unique constraint on email; can assume only one user if any
-  const usersSameEmail = await getUsers({
-    email: user.email,
-  });
-
-  if (usersSameEmail.length == 0) {
-    try {
-      return await UserModel.create({ 
-        ...user, 
-        id: uuidv4(),
-        role: UserScopes.User,
-      });
-    } catch (e : any) {
-      throw new BaseError(e.message, 500);
-    }
-  } else {
-    throw new BaseError('Email address already associated to a user', 409);
+  try {
+    return await UserModel.create({ 
+      ...user, 
+      id: uuidv4(),
+      role: UserScopes.User,
+    });
+  } catch (e : any) {
+    throw new BaseError(e.message, 500);
   }
 };
 

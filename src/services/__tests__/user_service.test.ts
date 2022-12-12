@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { userService } from 'services';
 import { UserScopes } from 'db/models/user'; 
 import db from '../../db/db';
@@ -13,14 +12,14 @@ const invalidId = '365e5281-bbb5-467c-a92d-2f4041828948';
 
 const userDataA: Omit<IUser, 'id'> = {
   email: 'garrygergich@test.com',
-  password: 'muncie',
+  netid: 'T0000A',
   name: 'Garry Gergich',
   role: UserScopes.User,
 };
 
 const userDataB: Omit<IUser, 'id'> = {
   email: 'benwyatt@test.com',
-  password: 'icetown',
+  netid: 'T0000B',
   name: 'Ben Wyatt',
   role: UserScopes.User,
 };
@@ -41,17 +40,10 @@ describe('userService', () => {
       const user: IUser = await userService.createUser(userDataA);
 
       expect(user.id).toBeDefined();
+      expect(user.netid).toBe(userDataA.netid);
       expect(user.email).toBe(userDataA.email);
       expect(user.name).toBe(userDataA.name);
-
-      const passCompareResult = await new Promise<boolean>((resolve, reject) => {
-        bcrypt.compare(userDataA.password, user.password, (err, result) => {
-          if (err) reject(err);
-          resolve(result);
-        });
-      });
-
-      expect(passCompareResult).toBe(true);
+      
       idUserA = String(user.id);
     });
 
@@ -63,17 +55,10 @@ describe('userService', () => {
       const user: IUser = await userService.createUser(userDataB);
 
       expect(user.id).toBeDefined();
+      expect(user.netid).toBe(userDataB.netid);
       expect(user.email).toBe(userDataB.email);
       expect(user.name).toBe(userDataB.name);
 
-      const passCompareResult = await new Promise<boolean>((resolve, reject) => {
-        bcrypt.compare(userDataB.password, user.password, (err, result) => {
-          if (err) reject(err);
-          resolve(result);
-        });
-      });
-
-      expect(passCompareResult).toBe(true);
       idUserB = String(user.id);
     });
   });
@@ -83,7 +68,7 @@ describe('userService', () => {
       const user: IUser = await userService.getUsers({ id: idUserA }).then((res) => res[0]);
 
       expect(user.email).toBe(userDataA.email);
-      expect(user.password).not.toBe(userDataA.password);
+      expect(user.netid).toBe(userDataA.netid);
       expect(user.name).toBe(userDataA.name);
     });
 

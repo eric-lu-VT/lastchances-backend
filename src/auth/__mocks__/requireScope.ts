@@ -3,9 +3,9 @@ import { RequestHandler } from 'express';
 import { IUser } from '../../db/models/user';
 
 const mockUser: Omit<IUser, 'id' | 'role'> = {
+  netid: 'f0056mr',
   email: 'eric.j.lu.25@dartmouth.edu',
-  password: '12345',
-  name: 'Grace Lu',
+  name: 'Eric Lu',
 };
 
 const requireScope = (): RequestHandler => (req, res, next) => {
